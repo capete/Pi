@@ -14,14 +14,15 @@
 // gpio1 Pin - wiringPi pin 0 is BCM_GPIO 17.
 
 #define	LED	0
-int gpio1;
+int gpio1, gpio2, gpio3, gpio4, gpio5, gpio6, gpio7, gpio8, gpio9, gpio10, gpio11, gpio12, gpio13;
+const char *gpio1_m, *gpio2_m, *gpio3_m, *gpio4_m, *gpio5_m, *gpio6_m, *gpio7_m, *gpio8_m, *gpio9_m, *gpio10_m, *gpio11_m, *gpio12_m, *gpio13_m;
 
 void process(){
     digitalWrite (gpio1, HIGH) ;  // On
-    syslog(LOG_INFO, "Led 0 is %d\n",digitalRead(gpio1)) ; // On
+    syslog(LOG_INFO, "Led 0 is %d",digitalRead(gpio1)) ; // On
     delay (500) ;               // mS
     digitalWrite (gpio1, LOW) ;   // Off
-    syslog(LOG_INFO,"Led 0 is %d\n",digitalRead(gpio1)) ; // On
+    syslog(LOG_INFO,"Led 0 is %d",digitalRead(gpio1)) ; // On
     delay (500) ;
   }
 
@@ -43,28 +44,27 @@ int main (void){
 
 /* Config file  */
 config_t cfg;
-config_setting_t *setting, *database;
-const char *str1, *str2, *host, *user, *pass, *db, *port;
-int tmp;
+config_setting_t *database;
+const char *str1, *host, *user, *pass, *db, *port;
 char *config_file_name = "/root/test/blink.conf";
 
 /*Initialization*/
 config_init(&cfg);
 /* Read the file. If there is an error, report it and exit. */
 if (!config_read_file(&cfg, config_file_name)){
-  syslog(LOG_INFO,"\n%s:%d - %s", config_error_file(&cfg), config_error_line(&cfg), config_error_text(&cfg));
+  syslog(LOG_INFO,"%s:%d - %s", config_error_file(&cfg), config_error_line(&cfg), config_error_text(&cfg));
   config_destroy(&cfg);
   return -1;}
 /* Get the configuration file name. */
 if (config_lookup_string(&cfg, "filename", &str1))
-  syslog(LOG_INFO,"\nFile Type: %s", str1);
+  syslog(LOG_INFO,"File Type: %s", str1);
   else
-    printf("\nNo 'filename' setting in configuration file.");
+    printf("No 'filename' setting in configuration file.");
   
 /*Read MySQL parameter group*/
 database = config_lookup(&cfg, "MySQL");
   if (database != NULL){
-    syslog(LOG_INFO, "Using database:");
+    syslog(LOG_INFO, "Using MySQL");
     if (config_setting_lookup_string(database, "host", &host)){
       syslog(LOG_INFO, "host: %s", host);}
       else {syslog(LOG_INFO, "No host defined");return -1;}
@@ -81,30 +81,81 @@ database = config_lookup(&cfg, "MySQL");
       syslog(LOG_INFO, "port: %s", port);}
       else {syslog(LOG_INFO, "No port defined");return -1;}  
    }
+
+/*GPIO's conf file*/
 if (config_lookup_int(&cfg, "GPIO1", &gpio1))
   syslog(LOG_INFO, "Read: %d", gpio1);
   else {syslog(LOG_INFO, "You haven't defined any GPIO to read");return -1;}
-/*Read the parameter group*/
-  setting = config_lookup(&cfg, "params");
-  if (setting != NULL){
-    /*Read the string*/
-    if (config_setting_lookup_string(setting, "param1", &str2)){
-      syslog(LOG_INFO,"\nParam1: %s", str2);}
-      else
-        syslog(LOG_INFO,"\nNo 'param1' setting in configuration file.");
-        /*Read the integer*/
-    if (config_setting_lookup_int(setting, "param2", &tmp)){
-      syslog(LOG_INFO,"\nParam2: %d", tmp);}
-      else
-        syslog(LOG_INFO,"\nNo 'param2' setting in configuration file.");
-    }
-    config_destroy(&cfg);
+if (config_lookup_string(&cfg, "GPIO1_M", &gpio1_m))
+  syslog(LOG_INFO, "Read: %s", gpio1_m);
+  else {syslog(LOG_INFO, "You haven't defined the GPIO mode");return -1;}
+    
+if (config_lookup_int(&cfg, "GPIO2", &gpio2)){
+  syslog(LOG_INFO, "Read: %d", gpio2);
+  if (config_lookup_string(&cfg, "GPIO2_M", &gpio2_m))
+    syslog(LOG_INFO, "Read: %s", gpio2_m);
+    else {syslog(LOG_INFO, "You haven't defined the GPIO mode");return -1;}}
+if (config_lookup_int(&cfg, "GPIO3", &gpio3)){
+  syslog(LOG_INFO, "Read: %d", gpio3);
+  if (config_lookup_string(&cfg, "GPIO3_M", &gpio3_m))
+    syslog(LOG_INFO, "Read: %s", gpio3_m);
+    else {syslog(LOG_INFO, "You haven't defined the GPIO mode");return -1;}}
+if (config_lookup_int(&cfg, "GPIO4", &gpio4)){
+  syslog(LOG_INFO, "Read: %d", gpio4);
+  if (config_lookup_string(&cfg, "GPIO4_M", &gpio4_m))
+    else {syslog(LOG_INFO, "You haven't defined the GPIO mode");return -1;}}
+if (config_lookup_int(&cfg, "GPIO5", &gpio5)){
+  syslog(LOG_INFO, "Read: %d", gpio5);
+  if (config_lookup_string(&cfg, "GPIO5_M", &gpio5_m))
+    else {syslog(LOG_INFO, "You haven't defined the GPIO mode");return -1;}}
+if (config_lookup_int(&cfg, "GPIO6", &gpio6)){
+  syslog(LOG_INFO, "Read: %d", gpio6);
+  if (config_lookup_string(&cfg, "GPIO6_M", &gpio6_m))
+    syslog(LOG_INFO, "Read: %s", gpio6_m);
+    else {syslog(LOG_INFO, "You haven't defined the GPIO mode");return -1;}}
+if (config_lookup_int(&cfg, "GPIO7", &gpio7)){
+  syslog(LOG_INFO, "Read: %d", gpio7);
+  if (config_lookup_string(&cfg, "GPIO7_M", &gpio7_m))
+    syslog(LOG_INFO, "Read: %s", gpio7_m);
+    else {syslog(LOG_INFO, "You haven't defined the GPIO mode");return -1;}}
+if (config_lookup_int(&cfg, "GPIO8", &gpio8)){
+  syslog(LOG_INFO, "Read: %d", gpio8);
+  if (config_lookup_string(&cfg, "GPIO8_M", &gpio8_m))
+    syslog(LOG_INFO, "Read: %s", gpio8_m);
+    else {syslog(LOG_INFO, "You haven't defined the GPIO mode");return -1;}}
+if (config_lookup_int(&cfg, "GPIO9", &gpio9)){
+  syslog(LOG_INFO, "Read: %d", gpio9);
+  if (config_lookup_string(&cfg, "GPIO9_M", &gpio9_m))
+    syslog(LOG_INFO, "Read: %s", gpio9_m);
+    else {syslog(LOG_INFO, "You haven't defined the GPIO mode");return -1;}}
+if (config_lookup_int(&cfg, "GPIO10", &gpio10)){
+  syslog(LOG_INFO, "Read: %d", gpio10);
+  if (config_lookup_string(&cfg, "GPIO10_M", &gpio10_m))
+    syslog(LOG_INFO, "Read: %s", gpio10_m);
+    else {syslog(LOG_INFO, "You haven't defined the GPIO mode");return -1;}}
+if (config_lookup_int(&cfg, "GPIO11", &gpio11)){
+  syslog(LOG_INFO, "Read: %d", gpio11);
+  if (config_lookup_string(&cfg, "GPIO11_M", &gpio11_m))
+    syslog(LOG_INFO, "Read: %s", gpio11_m);
+    else {syslog(LOG_INFO, "You haven't defined the GPIO mode");return -1;}}
+if (config_lookup_int(&cfg, "GPIO12", &gpio12)){
+  syslog(LOG_INFO, "Read: %d", gpio12);
+  if (config_lookup_string(&cfg, "GPIO12_M", &gpio12_m))
+    syslog(LOG_INFO, "Read: %s", gpio12_m);
+    else {syslog(LOG_INFO, "You haven't defined the GPIO mode");return -1;}}
+if (config_lookup_int(&cfg, "GPIO13", &gpio13)){
+  syslog(LOG_INFO, "Read: %d", gpio13);
+  if (config_lookup_string(&cfg, "GPIO13_M", &gpio13_m))
+    syslog(LOG_INFO, "Read: %s", gpio13_m);
+    else {syslog(LOG_INFO, "You haven't defined the GPIO mode");return -1;}}
+    
+config_destroy(&cfg);
 
 /* Pi stuff */
-  printf ("Raspberry Pi blink\n") ;
+  printf ("Raspberry Pi blink") ;
 
   wiringPiSetup () ;
-  pinMode (gpio1, OUTPUT) ;
+  pinMode (gpio1, gpio1_m) ;
 
   while(1){
     process();
