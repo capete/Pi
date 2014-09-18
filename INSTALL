@@ -1,0 +1,14 @@
+aptitude install libevent-dev libglib2.0-dev automake libboost-dev libssl-dev libboost-all-dev libtool
+wget http://ftp.heanet.ie/mirrors/www.apache.org/dist/thrift/0.9.1/thrift-0.9.1.tar.gz
+tar -zxvf thrift-0.9.1.tar.gz
+./configure
+cd test/cpp/.libs/
+for i in ../*.o; do echo $i; ln -s $i .; done
+cd ../../ && make && make install
+git clone https://github.com/facebookarchive/scribe.git
+cd scribe && vim configure.ac, comment #AM_INIT_AUTOMAKE([foreign -Wall])
+./bootrap.sh
+./configure CPPFLAGS="-DHAVE_INTTYPES_H -DHAVE_NETINET_IN_H" --with-boost-system=boost_system
+make && make install
+ldconfig
+

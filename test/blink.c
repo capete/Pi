@@ -10,7 +10,7 @@
 #include <time.h>
 #include <string.h>
 #include <wiringPi.h>
-
+#include "scribe_utils.h"
 // gpio1 Pin - wiringPi pin 0 is BCM_GPIO 17.
 
 #define	LED	0
@@ -20,6 +20,8 @@ const char *gpio1_m, *gpio2_m, *gpio3_m, *gpio4_m, *gpio5_m, *gpio6_m, *gpio7_m,
 void process(){
     digitalWrite (gpio1, HIGH) ;  // On
     syslog(LOG_INFO, "Led 0 is %d",digitalRead(gpio1)) ; // On
+	//	printf("Usage: %s host port category message", argv[0]);
+	//int result = scribe_send_msg("localhost", 1463, "test", "Pin0");
     delay (500) ;               // mS
     digitalWrite (gpio1, LOW) ;   // Off
     syslog(LOG_INFO,"Led 0 is %d",digitalRead(gpio1)) ; // On
@@ -103,10 +105,12 @@ if (config_lookup_int(&cfg, "GPIO3", &gpio3)){
 if (config_lookup_int(&cfg, "GPIO4", &gpio4)){
   syslog(LOG_INFO, "Read: %d", gpio4);
   if (config_lookup_string(&cfg, "GPIO4_M", &gpio4_m))
+    syslog(LOG_INFO, "Read: %s", gpio4_m);
     else {syslog(LOG_INFO, "You haven't defined the GPIO mode");return -1;}}
 if (config_lookup_int(&cfg, "GPIO5", &gpio5)){
   syslog(LOG_INFO, "Read: %d", gpio5);
   if (config_lookup_string(&cfg, "GPIO5_M", &gpio5_m))
+    syslog(LOG_INFO, "Read: %s", gpio5_m);
     else {syslog(LOG_INFO, "You haven't defined the GPIO mode");return -1;}}
 if (config_lookup_int(&cfg, "GPIO6", &gpio6)){
   syslog(LOG_INFO, "Read: %d", gpio6);
@@ -155,7 +159,7 @@ config_destroy(&cfg);
   printf ("Raspberry Pi blink") ;
 
   wiringPiSetup () ;
-  pinMode (gpio1, gpio1_m) ;
+  pinMode (gpio1, OUTPUT) ;
 
   while(1){
     process();
